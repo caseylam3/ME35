@@ -23,11 +23,30 @@ picam2.start() #must start the camera before taking any images
 time.sleep(0.1)
 
 #pin numbers for motor1 and motor2
-Motor1 = [18,17,27,22]
-Motor2 = [6,13,19,26]
+Motor1 = [11,12,13,15]
+Motor2 = [33,31,35,37]
 
 def moveSteps(stepright, stepleft):
-    try:
+    
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(Motor1[0], GPIO.OUT)
+    GPIO.setup(Motor1[1], GPIO.OUT)
+    GPIO.setup(Motor1[2], GPIO.OUT)
+    GPIO.setup(Motor1[3], GPIO.OUT)
+    GPIO.output(Motor1[0], GPIO.LOW)
+    GPIO.output(Motor1[1], GPIO.LOW)
+    GPIO.output(Motor1[2], GPIO.LOW)
+    GPIO.output(Motor1[3], GPIO.LOW)
+
+    GPIO.setup(Motor2[0], GPIO.OUT)
+    GPIO.setup(Motor2[1], GPIO.OUT)
+    GPIO.setup(Motor2[2], GPIO.OUT)
+    GPIO.setup(Motor2[3], GPIO.OUT)
+    GPIO.output(Motor2[0], GPIO.LOW)
+    GPIO.output(Motor2[1], GPIO.LOW)
+    GPIO.output(Motor2[2], GPIO.LOW)
+    GPIO.output(Motor2[3], GPIO.LOW)
+    try: 
         # Define the steps per revolution for the motor 
         steps_rev = 200
 
@@ -73,6 +92,8 @@ while True:
     percent_red = round((in_range/total)*100)
     print(percent_red, "%")
 
+    picam2.stop() #stop the picam 
+
     if percent_red >= 60: #value here that corresponds to too much red (over-rotation to the tape):
         moveSteps(1, 2)
     elif percent_red <= 40: #value here that corresponds to too much white (over-rotation to the paper):
@@ -80,4 +101,4 @@ while True:
     else:
         moveSteps(0, 0)
 
-   # picam2.stop() #stop the picam 
+   

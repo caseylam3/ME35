@@ -63,15 +63,19 @@ def moveSteps(stepright, stepleft):
         stepper2.start()
 
         # Check to see if both threads are done and clean up GPIO pins when done
-        # while True:
-        #     if stepper1.is_alive() == False and stepper2.is_alive() ==False:
-        #         GPIO.cleanup()
-        #         break
+        while True:
+            if stepper1.is_alive() == False and stepper2.is_alive() ==False:
+                GPIO.cleanup()
+                break
+
     except KeyboardInterrupt:
         GPIO.cleanup()
 
 
 while True:
+
+    Motor1 = [40,36,38,32]
+    Motor2 = [37,33,35,31]
 
     img_name = 'image.jpg'
     picam2.capture_file(img_name) #take image 
@@ -97,13 +101,12 @@ while True:
 
    # picam2.stop() #stop the picam 
 
-    if percent_blue >= 60: #value here that corresponds to too much red (over-rotation to the tape):
+    if percent_blue >= 60: #value here that corresponds to too much blue (over-rotation to the tape):
         moveSteps(1, 2)
     elif percent_blue <= 40: #value here that corresponds to too much white (over-rotation to the paper):
         moveSteps(2, 1)
     else:
         moveSteps(0, 0)
-
     
 
    

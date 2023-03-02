@@ -23,8 +23,8 @@ picam2.start() #must start the camera before taking any images
 time.sleep(0.1)
 
 #pin numbers for motor1 and motor2
-Motor1 = [11,12,13,15]
-Motor2 = [33,31,35,37]
+Motor1 = [40,36,38,32]
+Motor2 = [37,33,35,31]
 
 def moveSteps(stepright, stepleft):
     
@@ -33,6 +33,7 @@ def moveSteps(stepright, stepleft):
     GPIO.setup(Motor1[1], GPIO.OUT)
     GPIO.setup(Motor1[2], GPIO.OUT)
     GPIO.setup(Motor1[3], GPIO.OUT)
+
     GPIO.output(Motor1[0], GPIO.LOW)
     GPIO.output(Motor1[1], GPIO.LOW)
     GPIO.output(Motor1[2], GPIO.LOW)
@@ -42,10 +43,12 @@ def moveSteps(stepright, stepleft):
     GPIO.setup(Motor2[1], GPIO.OUT)
     GPIO.setup(Motor2[2], GPIO.OUT)
     GPIO.setup(Motor2[3], GPIO.OUT)
+
     GPIO.output(Motor2[0], GPIO.LOW)
     GPIO.output(Motor2[1], GPIO.LOW)
     GPIO.output(Motor2[2], GPIO.LOW)
     GPIO.output(Motor2[3], GPIO.LOW)
+
     try: 
         # Define the steps per revolution for the motor 
         steps_rev = 200
@@ -60,10 +63,10 @@ def moveSteps(stepright, stepleft):
         stepper2.start()
 
         # Check to see if both threads are done and clean up GPIO pins when done
-        while True:
-            if stepper1.is_alive() == False and stepper2.is_alive() ==False:
-                GPIO.cleanup()
-                break
+        # while True:
+        #     if stepper1.is_alive() == False and stepper2.is_alive() ==False:
+        #         GPIO.cleanup()
+        #         break
     except KeyboardInterrupt:
         GPIO.cleanup()
 
@@ -78,8 +81,8 @@ while True:
     total_pixels = img.shape #returns [2529, 4608] as the shape of the image
 
     #create boundary for red values as two arrays
-    lower = np.array([0,0,130]) #lower range of bgr values for red
-    upper = np.array([70,70,255]) #upper range of bgr values for red
+    lower = np.array([115,0,0]) #lower range of bgr values for blue
+    upper = np.array([255,70,70]) #upper range of bgr values for blue
 
     #determine if the pixel in the image has bgr values within the range
     image_mask = cv.inRange(img,lower,upper) #returns array of 0s & 255s, 255=white=within range, 0=black=not in range
@@ -89,16 +92,18 @@ while True:
     not_in_range = total_pixels[0]*total_pixels[1] - in_range 
     total = total_pixels[0]*total_pixels[1]
 
-    percent_red = round((in_range/total)*100)
-    print(percent_red, "%")
+    percent_blue = round((in_range/total)*100)
+    print(percent_blue, "%")
 
-    picam2.stop() #stop the picam 
+   # picam2.stop() #stop the picam 
 
-    if percent_red >= 60: #value here that corresponds to too much red (over-rotation to the tape):
+    if percent_blue >= 60: #value here that corresponds to too much red (over-rotation to the tape):
         moveSteps(1, 2)
-    elif percent_red <= 40: #value here that corresponds to too much white (over-rotation to the paper):
+    elif percent_blue <= 40: #value here that corresponds to too much white (over-rotation to the paper):
         moveSteps(2, 1)
     else:
         moveSteps(0, 0)
+
+    
 
    

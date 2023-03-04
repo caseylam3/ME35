@@ -22,10 +22,6 @@ picam2.set_controls({"AfMode": controls.AfModeEnum.Continuous}) #sets auto focus
 picam2.start() #must start the camera before taking any images
 time.sleep(0.1)
 
-#pin numbers for motor1 and motor2
-Motor1 = [40,36,38,32]
-Motor2 = [37,33,35,31]
-
 def moveSteps(stepright, stepleft):
     
     GPIO.setmode(GPIO.BOARD)

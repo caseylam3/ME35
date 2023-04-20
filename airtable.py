@@ -153,7 +153,6 @@ def main(args=None):
             action_client.send_navigate(Icex, Icey, Icez, Icew) #when ice station is ready, robot will move to that station
         if Dcup == 1:
             Rice = Fice = 0
-            self.send_dock() # once robot gets to coordinate, robot will dock
         if Fcup == 1:
             Dice = Rice = 0
             self.send_undock() #once task is finished, robot will undock
